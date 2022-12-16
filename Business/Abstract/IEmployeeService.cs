@@ -9,11 +9,12 @@ namespace Business.Abstract
 {
     public interface IEmployeeService
     {
-        int CheckedIdentityNumber(string identityNumber);
+        bool CheckIdentityNumber(string identityNumber);
         List<Employee> GetList();
         Employee GetById(int id);
         bool Add(Employee employee);
         void Delete(Employee employee);
         void Update(Employee employee);
+        
     }
 }

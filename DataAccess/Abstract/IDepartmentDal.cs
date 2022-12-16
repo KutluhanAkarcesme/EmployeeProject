@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.DataAccess;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,11 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
-    public interface IDepartmentDal
+    public interface IDepartmentDal : IEntityRepository<Department>
     {
-        List<Department> GetList();
-        Department GetById(int id);
-        void Add(Department department);
-        void Delete(Department department);
-        void Update(Department department);
+        bool CheckDepartmentUses(int departmentId);
+        void StatusChange(Department department);
+        List<Department> GetListWithStatusTrue();
 
     }
 }

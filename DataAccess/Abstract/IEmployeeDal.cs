@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.DataAccess;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,8 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
-    public interface IEmployeeDal
+    public interface IEmployeeDal : IEntityRepository<Employee>
     {
-        int ChechkIdentityNumber(string identityNumber);
-        List<Employee> GetList();
-        Employee GetById(int id);
-        void Add(Employee employee);
-        void Delete(Employee employee);
-        void Update(Employee employee);
+        bool CheckIdentityNumber(string identityNumber);
     }
 }

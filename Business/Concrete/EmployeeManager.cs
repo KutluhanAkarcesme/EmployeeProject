@@ -3,6 +3,7 @@ using Business.Validation.FluentValidation;
 using Core.CrossCuttingConcerns.Validation;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
+using DataAccess.Concrete.EntityFramework.Context;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -26,8 +27,8 @@ namespace Business.Concrete
             bool validation = ValidationTool.Validate(new EmployeeValidator(), employee);
             if (validation)
             {
-                var result = _employeeDal.ChechkIdentityNumber(employee.IdentityNumber);
-                if (result > 0)
+                var result = _employeeDal.CheckIdentityNumber(employee.IdentityNumber);
+                if (!result)
                 {
                     MessageBox.Show("Bu T.C Kimlik Numarasına Kayıtlı Bir Personel Var!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
@@ -40,9 +41,11 @@ namespace Business.Concrete
             
         }
 
-        public int CheckedIdentityNumber(string identityNumber)
+        
+
+        public bool CheckIdentityNumber(string identityNumber)
         {
-            return _employeeDal.ChechkIdentityNumber(identityNumber);
+            return _employeeDal.CheckIdentityNumber(identityNumber);
         }
 
         public void Delete(Employee employee)
@@ -52,7 +55,7 @@ namespace Business.Concrete
 
         public Employee GetById(int id)
         {
-            return _employeeDal.GetById(id);
+            return _employeeDal.GetById(g => g.Id == id);
         }
 
         public List<Employee> GetList()

@@ -14,5 +14,8 @@ namespace Business.Abstract
         bool Add(Department department);
         void Delete(Department department);
         bool Update(Department department);
+        bool CheckDepartmentUses(int departmendId);
+        bool StatusChange(Department department);
+        List<Department> GetListWithStatusTrue();
     }
 }
