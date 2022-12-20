@@ -1,4 +1,5 @@
 ﻿using Entities.Concrete;
+using Entities.Concrete.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,6 @@ namespace Business.Abstract
         bool CheckDepartmentUses(int departmendId);
         bool StatusChange(Department department);
         List<Department> GetListWithStatusTrue();
+        List<DepartmentDto> GetListEmployeeCount();
     }
 }

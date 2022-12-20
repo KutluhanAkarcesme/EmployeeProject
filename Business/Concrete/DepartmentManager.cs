@@ -5,6 +5,7 @@ using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.EntityFramework.Context;
 using Entities.Concrete;
+using Entities.Concrete.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +58,11 @@ namespace Business.Concrete
         public List<Department> GetList()
         {
             return _departmentDal.GetList();
+        }
+
+        public List<DepartmentDto> GetListEmployeeCount()
+        {
+            return _departmentDal.GetListEmployeeCount();
         }
 
         public List<Department> GetListWithStatusTrue()

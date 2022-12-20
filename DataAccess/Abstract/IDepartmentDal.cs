@@ -1,5 +1,6 @@
 ﻿using Core.DataAccess;
 using Entities.Concrete;
+using Entities.Concrete.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,6 @@ namespace DataAccess.Abstract
         bool CheckDepartmentUses(int departmentId);
         void StatusChange(Department department);
         List<Department> GetListWithStatusTrue();
-
+        List<DepartmentDto> GetListEmployeeCount();
     }
 }

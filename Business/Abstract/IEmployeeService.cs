@@ -1,4 +1,5 @@
 ﻿using Entities.Concrete;
+using Entities.Concrete.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace Business.Abstract
         bool Add(Employee employee);
         void Delete(Employee employee);
         void Update(Employee employee);
-        
+        List<EmployeeDto> GetEmployeeList();
+
+
     }
 }

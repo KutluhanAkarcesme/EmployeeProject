@@ -5,6 +5,7 @@ using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.EntityFramework.Context;
 using Entities.Concrete;
+using Entities.Concrete.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,8 +42,6 @@ namespace Business.Concrete
             
         }
 
-        
-
         public bool CheckIdentityNumber(string identityNumber)
         {
             return _employeeDal.CheckIdentityNumber(identityNumber);
@@ -56,6 +55,11 @@ namespace Business.Concrete
         public Employee GetById(int id)
         {
             return _employeeDal.GetById(g => g.Id == id);
+        }
+
+        public List<EmployeeDto> GetEmployeeList()
+        {
+            return _employeeDal.GetEmployeeList();
         }
 
         public List<Employee> GetList()
