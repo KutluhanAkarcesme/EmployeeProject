@@ -31,7 +31,7 @@ namespace DataAccess.Concrete.EntityFramework
                              {
                                  Id = department.Id,
                                  Name = department.Name,
-                                 EmployeeCount = context.Employees.Where(e => e.DepartmentId == department.Id && e.Status != "Ayrıldı").Count()
+                                 EmployeeCount = context.Employees.Where(e => e.DepartmentId == department.Id && e.Status != "İşten Ayrıldı").Count()
                              };
                 return result.OrderByDescending(p => p.EmployeeCount).ToList();
             }
