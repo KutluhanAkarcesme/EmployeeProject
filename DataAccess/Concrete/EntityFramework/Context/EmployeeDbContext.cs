@@ -17,6 +17,6 @@ namespace DataAccess.Concrete.EntityFramework.Context
 
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
-        public DbSet<OffDay> OffDsays { get; set; }
+        public DbSet<OffDay> OffDays { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace DataAccess.Concrete.EntityFramework
         {
             using (var context = new EmployeeDbContext())
             {
-                var result = from offday in context.OffDsays
+                var result = from offday in context.OffDays
                              join employee in context.Employees on offday.EmployeeId equals employee.Id
                              where offday.EmployeeId == employeeId
                              select new OffDayDto

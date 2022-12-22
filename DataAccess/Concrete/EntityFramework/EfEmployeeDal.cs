@@ -41,7 +41,28 @@ namespace DataAccess.Concrete.EntityFramework
                                  ReasonOfLeaving = employee.ReasonOfLeaving,
                                  Salary = employee.Salary,
                                  StartingDate = employee.StartingDate,
-                                 Status = employee.Status
+                                 Status = employee.Status,
+                                 OffDayEndDate = (context.OffDays.Where(o => o.EmployeeId == employee.Id).OrderByDescending(o => o.Date).Count() == 0 ? null :
+                                 context.OffDays.Where(o => o.EmployeeId == employee.Id).OrderByDescending(o => o.Date).Select(s => s.Date).FirstOrDefault())
+                             };
+                return result.OrderBy(p => p.Name).ToList();
+            }
+        }
+
+        public List<OffDayEmployeeDto> GetEmployeeListByOffDay()
+        {
+            using (var context = new EmployeeDbContext())
+            {
+                var result = from employee in context.Employees.Where(e => e.Status != "İşten Ayrıldı")
+                             join department in context.Departments on employee.DepartmentId equals department.Id
+                             select new OffDayEmployeeDto
+                             {
+                                 Id = employee.Id,
+                                 DepartmentName = department.Name,
+                                 BirthDate = employee.BirthDate,
+                                 IdentityNumber = employee.IdentityNumber,
+                                 Name = employee.Name + " " + employee.LastName
+                                 
                              };
                 return result.OrderBy(p => p.Name).ToList();
             }

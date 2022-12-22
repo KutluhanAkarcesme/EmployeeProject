@@ -16,9 +16,11 @@ namespace Business.Abstract
         bool Add(Employee employee);
         void Delete(Employee employee);
         bool Update(Employee employee);
+        void UpdateList(Employee employee);
         List<EmployeeDto> GetEmployeeList();
         void QuitJob(Employee employee);
         void ReHired (Employee employee);
+        public List<OffDayEmployeeDto> GetEmployeeListByOffDay();
 
     }
 }

@@ -62,6 +62,11 @@ namespace Business.Concrete
             return _employeeDal.GetEmployeeList().ToList();
         }
 
+        public List<OffDayEmployeeDto> GetEmployeeListByOffDay()
+        {
+            return _employeeDal.GetEmployeeListByOffDay().ToList();
+        }
+
         public List<Employee> GetList()
         {
             return _employeeDal.GetList();
@@ -100,6 +105,11 @@ namespace Business.Concrete
                 return true;
             }
             return false;
+        }
+
+        public void UpdateList(Employee employee)
+        {
+            _employeeDal.Update(employee);
         }
     }
 }

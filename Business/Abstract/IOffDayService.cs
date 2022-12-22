@@ -10,9 +10,10 @@ namespace Business.Abstract
 {
     public interface IOffDayService 
     {
-        void Add(OffDay offDay);
+        bool Add(int id,string startDate,string endDate);
         void Update(OffDay offDay);
         void Delete(OffDay offDay);
         List<OffDayDto> GetEmployeeOffDays(int employeeId);
+        OffDay GetEmployeeOffDayByDate(int employeeId,DateTime date);
     }
 }
