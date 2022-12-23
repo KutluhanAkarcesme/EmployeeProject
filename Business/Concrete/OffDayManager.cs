@@ -54,9 +54,32 @@ namespace Business.Concrete
             return true;
         }
 
-        public void Delete(OffDay offDay)
+        public bool Delete(OffDay offDay)
         {
-            _offDayDal.Delete(offDay);
+            var offDayEmployee = _offDayDal.GetEmployee(offDay.EmployeeId);
+            if (offDayEmployee.Status != "İşten Ayrıldı")
+            {
+                _offDayDal.Delete(offDay);
+                MessageBox.Show("Personel izni başarıyla silindi","Information",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                return true;
+            }
+            MessageBox.Show("İşten ayrılan personelin izin kaydı silinemez", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
+        }
+
+        public List<OffDayDto> GetAllEmployeeOffDays()
+        {
+            return _offDayDal.GetAllEmployeeOffDays();
+        }
+
+        public OffDay GetById(int id)
+        {
+            return _offDayDal.GetById(o => o.Id == id);
+        }
+
+        public Employee GetEmployee(int employeeId)
+        {
+            return _offDayDal.GetEmployee(employeeId);
         }
 
         public OffDay GetEmployeeOffDayByDate(int employeeId, DateTime date)
@@ -69,9 +92,19 @@ namespace Business.Concrete
             return _offDayDal.GetEmployeeOffDays(employeeId);
         }
 
-        public void Update(OffDay offDay)
+        public bool Update(OffDay offDay)
         {
+                var result = _offDayDal.GetList().Where(e => e.EmployeeId == offDay.EmployeeId).ToList();
+                int count = result.Where(o => o.Date == offDay.Date).Count();
+                if (count > 0)
+                {
+                    MessageBox.Show("Personel bu tarihler arasında zaten izinli.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
             _offDayDal.Update(offDay);
+            MessageBox.Show("Personel izin tarihi başarıyla güncellendi.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return true;
+            
         }
     }
 }

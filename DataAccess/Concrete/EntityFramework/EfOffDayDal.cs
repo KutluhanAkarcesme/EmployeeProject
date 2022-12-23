@@ -13,6 +13,32 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfOffDayDal : EfEntityRepositoryBase<OffDay, EmployeeDbContext>, IOffDayDal
     {
+        public List<OffDayDto> GetAllEmployeeOffDays()
+        {
+            using (var context = new EmployeeDbContext())
+            {
+                var result = from offday in context.OffDays
+                             join employee in context.Employees on offday.EmployeeId equals employee.Id
+                             select new OffDayDto
+                             {
+                                 Id = offday.Id,
+                                 EmployeeId = offday.EmployeeId,
+                                 Name = employee.Name.ToUpper() + " " + employee.LastName.ToUpper(),
+                                 Date = offday.Date
+                             };
+                return result.OrderByDescending(d => d.Date).ToList();
+            }
+        }
+
+        public Employee GetEmployee(int employeeId)
+        {
+            using (var context = new EmployeeDbContext())
+            {
+                var result = context.Employees.Find(employeeId);
+                return result;
+            }
+        }
+
         public List<OffDayDto> GetEmployeeOffDays(int employeeId)
         {
             using (var context = new EmployeeDbContext())

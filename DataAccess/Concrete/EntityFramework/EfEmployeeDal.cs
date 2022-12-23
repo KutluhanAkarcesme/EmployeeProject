@@ -67,5 +67,14 @@ namespace DataAccess.Concrete.EntityFramework
                 return result.OrderBy(p => p.Name).ToList();
             }
         }
+
+        public OffDay GetOffDayByEmployee(int employeeId, DateTime date)
+        {
+            using (var context = new EmployeeDbContext())
+            {
+                var result = context.OffDays.Where(e => e.EmployeeId == employeeId && e.Date == date).FirstOrDefault();
+                return result;
+            }
+        }
     }
 }

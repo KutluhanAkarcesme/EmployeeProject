@@ -14,5 +14,6 @@ namespace DataAccess.Abstract
         bool CheckIdentityNumber(string identityNumber);
         List<EmployeeDto> GetEmployeeList();
         List<OffDayEmployeeDto> GetEmployeeListByOffDay();
+        OffDay GetOffDayByEmployee(int employeeId,DateTime date);
     }
 }

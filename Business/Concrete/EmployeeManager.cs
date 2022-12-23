@@ -74,6 +74,12 @@ namespace Business.Concrete
 
         public void QuitJob(Employee employee)
         {
+            var result = _employeeDal.GetOffDayByEmployee(employee.Id, Convert.ToDateTime(employee.EndingDate));
+            if (result != null)
+            {
+                MessageBox.Show("İzinli personel işten çıkartılamaz", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             _employeeDal.Update(employee);
             MessageBox.Show("Personel başarıyla işten çıkartıldı", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }

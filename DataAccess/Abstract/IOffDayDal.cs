@@ -13,5 +13,7 @@ namespace DataAccess.Abstract
     public interface IOffDayDal : IEntityRepository<OffDay>
     {
         List<OffDayDto> GetEmployeeOffDays(int employeeId);
+        List<OffDayDto> GetAllEmployeeOffDays();
+        Employee GetEmployee(int employeeId);
     }
 }
