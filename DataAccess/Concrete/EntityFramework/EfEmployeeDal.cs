@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfEmployeeDal : EfEntityRepositoryBase<Employee,EmployeeDbContext>, IEmployeeDal
+    public class EfEmployeeDal : EfEntityRepositoryBase<Employee, EmployeeDbContext>, IEmployeeDal
     {
         public bool CheckIdentityNumber(string identityNumber)
         {
@@ -62,7 +62,7 @@ namespace DataAccess.Concrete.EntityFramework
                                  BirthDate = employee.BirthDate,
                                  IdentityNumber = employee.IdentityNumber,
                                  Name = employee.Name + " " + employee.LastName
-                                 
+
                              };
                 return result.OrderBy(p => p.Name).ToList();
             }
@@ -73,6 +73,15 @@ namespace DataAccess.Concrete.EntityFramework
             using (var context = new EmployeeDbContext())
             {
                 var result = context.OffDays.Where(e => e.EmployeeId == employeeId && e.Date == date).FirstOrDefault();
+                return result;
+            }
+        }
+
+        public PayrollParameter GetParameter()
+        {
+            using (var context = new EmployeeDbContext())
+            {
+                var result = context.PayrollParameters.FirstOrDefault();
                 return result;
             }
         }

@@ -21,6 +21,7 @@ namespace Business.Abstract
         void QuitJob(Employee employee);
         void ReHired (Employee employee);
         public List<OffDayEmployeeDto> GetEmployeeListByOffDay();
+        PayrollParameter GetPayrollParameter();
 
     }
 }

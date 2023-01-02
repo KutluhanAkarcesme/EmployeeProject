@@ -15,5 +15,6 @@ namespace DataAccess.Abstract
         List<EmployeeDto> GetEmployeeList();
         List<OffDayEmployeeDto> GetEmployeeListByOffDay();
         OffDay GetOffDayByEmployee(int employeeId,DateTime date);
+        PayrollParameter GetParameter();
     }
 }

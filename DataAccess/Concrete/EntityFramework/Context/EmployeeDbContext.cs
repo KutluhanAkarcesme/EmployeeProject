@@ -18,5 +18,7 @@ namespace DataAccess.Concrete.EntityFramework.Context
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<OffDay> OffDays { get; set; }
+        public DbSet<PayrollParameter> PayrollParameters { get; set; } 
+        public DbSet<Payroll> Payrolls { get; set; }
     }
 }

@@ -34,6 +34,12 @@ namespace Business.Concrete
                     MessageBox.Show("Bu T.C Kimlik Numarasına Kayıtlı Bir Personel Var!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
+                var resultSalary = _employeeDal.GetParameter();
+                if (resultSalary.NetMinimumVage >= employee.Salary)
+                {
+                    MessageBox.Show("Personel ücreti asgari ücretten az olamaz", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
                 _employeeDal.Add(employee);
                 MessageBox.Show("Personel Başarıyla Eklendi", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return true;
@@ -72,6 +78,11 @@ namespace Business.Concrete
             return _employeeDal.GetList();
         }
 
+        public PayrollParameter GetPayrollParameter()
+        {
+            return _employeeDal.GetParameter();
+        }
+
         public void QuitJob(Employee employee)
         {
             var result = _employeeDal.GetOffDayByEmployee(employee.Id, Convert.ToDateTime(employee.EndingDate));
@@ -103,6 +114,12 @@ namespace Business.Concrete
                     if (!result)
                     {
                         MessageBox.Show("Bu T.C Kimlik Numarasına Kayıtlı Bir Personel Var!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                    }
+                    var resultSalary = _employeeDal.GetParameter();
+                    if (resultSalary.NetMinimumVage >= employee.Salary)
+                    {
+                        MessageBox.Show("Personel ücreti asgari ücretten az olamaz", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
                 }
