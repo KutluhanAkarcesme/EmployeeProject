@@ -35,7 +35,7 @@ namespace Business.Concrete
                     return false;
                 }
                 var resultSalary = _employeeDal.GetParameter();
-                if (resultSalary.NetMinimumVage >= employee.Salary)
+                if (resultSalary.NetMinimumWage >= employee.Salary)
                 {
                     MessageBox.Show("Personel ücreti asgari ücretten az olamaz", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
@@ -117,7 +117,7 @@ namespace Business.Concrete
                         return false;
                     }
                     var resultSalary = _employeeDal.GetParameter();
-                    if (resultSalary.NetMinimumVage >= employee.Salary)
+                    if (resultSalary.NetMinimumWage >= employee.Salary)
                     {
                         MessageBox.Show("Personel ücreti asgari ücretten az olamaz", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;

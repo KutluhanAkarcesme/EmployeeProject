@@ -81,7 +81,7 @@ namespace DataAccess.Concrete.EntityFramework
         {
             using (var context = new EmployeeDbContext())
             {
-                var result = context.PayrollParameters.FirstOrDefault();
+                var result = context.PayrolParameters.FirstOrDefault();
                 return result;
             }
         }

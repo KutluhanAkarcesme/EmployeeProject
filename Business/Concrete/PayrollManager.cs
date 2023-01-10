@@ -21,90 +21,110 @@ namespace Business.Concrete
 
         public bool Add(int mounth, int year)
         {
-            int serviceDay = 0;
-            var parameter = _payrollDal.GetPayrollParameter();
-            var employeeList = _payrollDal.GetEmployeeList(mounth, year);
-            foreach (var employee in employeeList)
+            var payrollList = _payrollDal.GetList().Where(p => p.Mounth == mounth && p.Year == year).ToList();
+            if (payrollList.Count() > 0)
             {
-                int offDays = _payrollDal.GetEmployeeOffDayCount(employee.Id, mounth, year);
-
-                DateTime dateTime1 = Convert.ToDateTime("01." + mounth + "." + year);
-                DateTime dateTime2 = dateTime1.AddMonths(1);
-                dateTime2 = dateTime2.AddDays(-1);
-                if (employee.StartingDate <= dateTime2)
+                if (MessageBox.Show("Bu aya ait bir bordro var.İşleme devam ederseniz bordro silinip tekrar hesaplanacak.İşleme devam etmek istiyor musunuz?","Warning"
+                    ,MessageBoxButtons.YesNo,MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    if (employee.Status == "İşten Ayrıldı")
+                    foreach (var payroll in payrollList)
                     {
-                        if (employee.EndingDate >= dateTime1)
+                        _payrollDal.Delete(payroll);
+                    }
+                    int serviceDay = 0;
+                    var parameter = _payrollDal.GetPayrollParameter();
+                    var employeeList = _payrollDal.GetEmployeeList();
+                    foreach (var employee in employeeList)
+                    {
+                        int offDays = _payrollDal.GetEmployeeOffDayCount(employee.Id, mounth, year);
+
+                        DateTime dateTime1 = Convert.ToDateTime("01." + mounth + "." + year);
+                        DateTime dateTime2 = dateTime1.AddMonths(1);
+                        dateTime2 = dateTime2.AddDays(-1);
+
+                        if (employee.StartingDate <= dateTime2)
                         {
-                            if (employee.EndingDate <= dateTime2)
+                            if (employee.Status == "İşten Ayrıldı")
                             {
-                                TimeSpan timeSpan = dateTime2 - employee.StartingDate;
-                                if ((Convert.ToInt16(timeSpan.ToString()) + 1) >= dateTime2.Day)
+                                if (employee.EndingDate >= dateTime1)
                                 {
-                                    timeSpan = Convert.ToDateTime(employee.EndingDate) - dateTime1;
-                                    serviceDay = Convert.ToInt16(timeSpan.ToString()) + 1;
+                                    if (employee.EndingDate <= dateTime2)
+                                    {
+                                        TimeSpan timeSpan = dateTime2 - employee.StartingDate;
+                                        if ((Convert.ToInt16(timeSpan.Days.ToString()) + 1) >= dateTime2.Day)
+                                        {
+                                            timeSpan = Convert.ToDateTime(employee.EndingDate) - dateTime1;
+                                            serviceDay = Convert.ToInt16(timeSpan.Days.ToString()) + 1;
+                                        }
+                                        else
+                                        {
+                                            timeSpan = Convert.ToDateTime(employee.EndingDate) - employee.StartingDate;
+                                            serviceDay = Convert.ToInt16(timeSpan.Days.ToString()) + 1;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        TimeSpan timeSpan = dateTime2 - employee.StartingDate;
+                                        if ((Convert.ToInt16(timeSpan.Days.ToString()) + 1) >= dateTime2.Day)
+                                        {
+                                            serviceDay = 30;
+                                        }
+                                        else
+                                        {
+                                            serviceDay = Convert.ToInt16(timeSpan.Days.ToString()) + 1;
+                                        }
+                                    }
                                 }
-                                else
-                                {
-                                    timeSpan = Convert.ToDateTime(employee.EndingDate) - employee.StartingDate;
-                                    serviceDay = Convert.ToInt16(timeSpan.ToString()) + 1;
-                                }
+
                             }
                             else
                             {
                                 TimeSpan timeSpan = dateTime2 - employee.StartingDate;
-                                if ((Convert.ToInt16(timeSpan.ToString()) + 1) >= dateTime2.Day)
+                                if ((Convert.ToInt16(timeSpan.Days.ToString()) + 1) >= dateTime2.Day)
                                 {
                                     serviceDay = 30;
                                 }
                                 else
                                 {
-                                    serviceDay = Convert.ToInt16(timeSpan.ToString()) + 1;
+                                    serviceDay = Convert.ToInt16(timeSpan.Days.ToString()) + 1;
                                 }
                             }
                         }
 
-                    }
-                    else
-                    {
-                        TimeSpan timeSpan = dateTime2 - employee.StartingDate;
-                        if ((Convert.ToInt16(timeSpan.ToString()) + 1) >= dateTime2.Day)
+                        if (serviceDay > 0)
                         {
-                            serviceDay = 30;
+                            serviceDay = serviceDay - offDays;
+                            Payroll payroll = new Payroll
+                            {
+                                EmployeeId = employee.Id,
+                                NetPay = (employee.Salary / 30) * serviceDay,
+                                ServiceDay = serviceDay,
+                                Mounth = mounth,
+                                Year = year,
+                                GrossPay = (((employee.Salary / 30) * serviceDay) - ((parameter.Parameter1 / 30) * serviceDay)) * parameter.Parameter2,
+                                CumulaticeIncomeTaxAssesment = ((((employee.Salary / 30) * serviceDay) - ((parameter.Parameter1 / 30) * serviceDay)) * parameter.Parameter2) * 15 / 100,
+                                IncomeTaxAssesment = ((((employee.Salary / 30) * serviceDay) - ((parameter.Parameter1 / 30) * serviceDay)) * parameter.Parameter2) * 15 / 100,
+                                InsurancePremiumEmployeeShare = 0
+                            };
+                            _payrollDal.Add(payroll);
                         }
-                        else
-                        {
-                            serviceDay = Convert.ToInt16(timeSpan.ToString()) + 1;
-                        }
+
                     }
+                    return true;
                 }
-
-                if (serviceDay > 0)
-                {
-                    serviceDay = serviceDay - offDays;
-                    Payroll payroll = new Payroll
-                    {
-                        EmployeeId = employee.Id,
-                        NetPay = (employee.Salary / 30) * serviceDay,
-                        ServiceDay = serviceDay,
-                        Mounth = mounth,
-                        Year = year,
-                        GrossPay = ((employee.Salary / 30) * serviceDay) - ((parameter.Parameter1 / 30) * serviceDay),
-                        CumulaticeIncomeTaxAssesment = ((((employee.Salary / 30) * serviceDay) - ((parameter.Parameter1 / 30) * serviceDay)) * parameter.Parameter2) * 15 / 100,
-                        IncomeTaxAssesment = ((((employee.Salary / 30) * serviceDay) - ((parameter.Parameter1 / 30) * serviceDay)) * parameter.Parameter2) * 15 / 100,
-                        InsurancePremiumEmployeeShare = 0
-                    };
-                    _payrollDal.Add(payroll);
-                }
-
             }
-            return true;
+
+            return false;
         }
 
         public void Delete(Payroll payroll)
         {
             _payrollDal.Delete(payroll);
+        }
+
+        public List<PayrollListDto> GetPayrollList()
+        {
+            return _payrollDal.GetPayrollList();
         }
 
         public List<PayrollDto> GetPayrollListWithEmployee()

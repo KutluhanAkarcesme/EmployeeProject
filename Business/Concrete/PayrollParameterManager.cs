@@ -34,7 +34,7 @@ namespace Business.Concrete
             {
                 _payrollParameterDal.Update(payrollParameter);
             }
-            
+            MessageBox.Show("Parametreler başarıyla güncellendi","Information",MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

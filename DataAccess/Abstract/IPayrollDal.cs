@@ -12,7 +12,8 @@ namespace DataAccess.Abstract
     public interface IPayrollDal : IEntityRepository<Payroll>
     {
         List<PayrollDto> GetPayrollListWithEmployee();
-        List<Employee> GetEmployeeList(int mounth, int year);
+        List<Employee> GetEmployeeList();
+        List<PayrollListDto> GetPayrollList();
         PayrollParameter GetPayrollParameter();
         int GetEmployeeOffDayCount(int employeeId, int mounth , int year);
     }

@@ -13,5 +13,6 @@ namespace Business.Abstract
         bool Add(int mounth, int year);
         void Delete(Payroll payroll);
         List<PayrollDto> GetPayrollListWithEmployee();
+        List<PayrollListDto> GetPayrollList();
     }
 }

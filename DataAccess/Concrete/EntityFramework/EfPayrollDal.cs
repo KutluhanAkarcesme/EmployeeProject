@@ -13,15 +13,11 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfPayrollDal : EfEntityRepositoryBase<Payroll, EmployeeDbContext>, IPayrollDal
     {
-        public List<Employee> GetEmployeeList(int mounth, int year)
+        public List<Employee> GetEmployeeList()
         {
             using (var context = new EmployeeDbContext())
             {
-                DateTime dateTime1 = Convert.ToDateTime("01." + mounth + "." + year);
-                DateTime dateTime2 = dateTime1.AddMonths(1);
-                dateTime2 = dateTime2.AddDays(-1);
-
-                var result = context.Employees.Where(e => e.StartingDate <= dateTime2 && e.Status != "İşten Ayrıldı" || e.EndingDate >= dateTime1 && e.EndingDate <= dateTime2).ToList();
+                var result = context.Employees.ToList();
                 return result.OrderBy(e => e.Name).ToList();
             }
         }
@@ -36,6 +32,26 @@ namespace DataAccess.Concrete.EntityFramework
                 
                 var result = context.OffDays.Where(o => o.EmployeeId == employeeId && o.Date >= dateTime1 && o.Date <= dateTime2).Count();
                 return result;
+            }
+        }
+
+        public List<PayrollListDto> GetPayrollList()
+        {
+            using (var context = new EmployeeDbContext())
+            {
+                var f = from x in context.Payrolls.OrderBy(o => o.Mounth).ToList()
+                        group x.Mounth by x.Mounth into g
+                        select new { Id = g.Key, PayrollList = g.ToList() };
+
+                var result = from x in f.ToList()
+                             select new PayrollListDto
+                             {
+                                 Mounth = x.PayrollList.FirstOrDefault(),
+                                 Year = 2023 ,
+                                 EmployeeCount = context.Payrolls.Where(p => p.Mounth == x.PayrollList.FirstOrDefault() && p.Year == 2023).Count(),
+                                 TotalNetPay = context.Payrolls.Where(p => p.Mounth == x.PayrollList.FirstOrDefault() && p.Year == 2023).Sum(s => s.NetPay)
+                             };
+                return result.ToList();
             }
         }
 
@@ -67,7 +83,7 @@ namespace DataAccess.Concrete.EntityFramework
         {
             using (var context = new EmployeeDbContext())
             {
-                var result = context.PayrollParameters.FirstOrDefault();
+                var result = context.PayrolParameters.FirstOrDefault();
                 return result;
             }
         }
