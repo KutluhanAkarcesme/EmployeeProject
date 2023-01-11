@@ -47,6 +47,7 @@ namespace DataAccess.Concrete.EntityFramework
                              select new PayrollListDto
                              {
                                  Mounth = x.PayrollList.FirstOrDefault(),
+                                 MounthName = Convert.ToDateTime("01." + x.PayrollList.FirstOrDefault() + ".2023").ToString("MMMM").ToUpper(),
                                  Year = 2023 ,
                                  EmployeeCount = context.Payrolls.Where(p => p.Mounth == x.PayrollList.FirstOrDefault() && p.Year == 2023).Count(),
                                  TotalNetPay = context.Payrolls.Where(p => p.Mounth == x.PayrollList.FirstOrDefault() && p.Year == 2023).Sum(s => s.NetPay)
