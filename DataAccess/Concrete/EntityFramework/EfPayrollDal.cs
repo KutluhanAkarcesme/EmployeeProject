@@ -65,7 +65,7 @@ namespace DataAccess.Concrete.EntityFramework
                              {
                                  Id = payroll.Id,
                                  EmployeeId = employee.Id,
-                                 Name = employee.Name,
+                                 Name = employee.Name.ToUpper() + " " + employee.LastName.ToUpper(),
                                  IdentityNumber = employee.IdentityNumber,
                                  CumulaticeIncomeTaxAssesment = payroll.CumulaticeIncomeTaxAssesment,
                                  GrossPay = payroll.GrossPay,

@@ -93,6 +93,15 @@ namespace Business.Concrete
 
                         if (serviceDay > 0)
                         {
+                            decimal cumulatice = 0;
+                            int m = mounth;
+                            while (m == 0)
+                            {
+                                m--;
+                                var findPayroll = _payrollDal.GetById(g => g.EmployeeId == employee.Id && g.Mounth == m && g.Year == year);
+                                cumulatice = cumulatice + findPayroll.IncomeTaxAssesment;
+                            }
+
                             serviceDay = serviceDay - offDays;
                             Payroll payroll = new Payroll
                             {
@@ -102,9 +111,9 @@ namespace Business.Concrete
                                 Mounth = mounth,
                                 Year = year,
                                 GrossPay = (((employee.Salary / 30) * serviceDay) - ((parameter.Parameter1 / 30) * serviceDay)) * parameter.Parameter2,
-                                CumulaticeIncomeTaxAssesment = ((((employee.Salary / 30) * serviceDay) - ((parameter.Parameter1 / 30) * serviceDay)) * parameter.Parameter2) * 15 / 100,
-                                IncomeTaxAssesment = ((((employee.Salary / 30) * serviceDay) - ((parameter.Parameter1 / 30) * serviceDay)) * parameter.Parameter2) * 15 / 100,
-                                InsurancePremiumEmployeeShare = 0
+                                InsurancePremiumEmployeeShare = ((((employee.Salary / 30) * serviceDay) - ((parameter.Parameter1 / 30) * serviceDay)) * parameter.Parameter2) * 15 / 100,
+                                IncomeTaxAssesment = ((((employee.Salary / 30) * serviceDay) - ((parameter.Parameter1 / 30) * serviceDay)) * parameter.Parameter2),
+                                CumulaticeIncomeTaxAssesment = cumulatice + ((((employee.Salary / 30) * serviceDay) - ((parameter.Parameter1 / 30) * serviceDay)) * parameter.Parameter2)
                             };
                             _payrollDal.Add(payroll);
                         }
